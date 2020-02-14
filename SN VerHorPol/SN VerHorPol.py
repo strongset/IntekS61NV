@@ -799,7 +799,7 @@ def runTest():
                             ## Return DUT to initial state and de-initialize grabber device
                             NOS_API.deinitialize()
                             return
-                        if not(TEST_CREATION_API.compare_pictures("signal_menu_ref", "signal_menu_ver", "[CubaVision]")):
+                        if not(TEST_CREATION_API.compare_pictures("signal_menu_ref", "signal_menu_ver", "[AlJazeera]")):
                             time.sleep(1)
                             ## Zap to vertical polarization channel
                             TEST_CREATION_API.send_ir_rc_command(NOS_API.VERTICAL_POLARIZATION_CHANNEL_NUMBER)
@@ -842,7 +842,7 @@ def runTest():
                                 ## Return DUT to initial state and de-initialize grabber device
                                 NOS_API.deinitialize()
                                 return
-                            if not(TEST_CREATION_API.compare_pictures("signal_menu_ref", "signal_menu_ver", "[CubaVision]")):
+                            if not(TEST_CREATION_API.compare_pictures("signal_menu_ref", "signal_menu_ver", "[AlJazeera]")):
                                 TEST_CREATION_API.write_log_to_file("Doesn't Navigate to right place")
                                 NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
                                                         + "; Error message: " + NOS_API.test_cases_results_info.navigation_error_message)
