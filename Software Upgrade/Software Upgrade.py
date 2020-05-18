@@ -1106,14 +1106,93 @@ def runTest():
                     if (video_height == "1080"):
                         macro_signal_level = "[SIGNAL_VALUE_FTI_50_PERCENT_1080p]"
                         macro_signal_quality = "[SIGNAL_QUALITY_FTI_50_PERCENT_1080p]"
+                        macro_right_place = "[FTI_Signal_1080]"
                         ref_image = "signal_value_fti_1080_ref"
                     else:
                         macro_signal_level = "[SIGNAL_VALUE_FTI_50_PERCENT]"
                         macro_signal_quality = "[SIGNAL_QUALITY_FTI_50_PERCENT]"
+                        macro_right_place = "[FTI_Signal]"
                         ref_image = "signal_value_fti_ref"
                     
                     if (NOS_API.grab_picture("signal_value")):
-                  
+                        video_result = NOS_API.compare_pictures(ref_image, "signal_value", macro_right_place)
+                        if not(video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                            TEST_CREATION_API.send_ir_rc_command("[Back_Left]")
+                            time.sleep(1)
+                            TEST_CREATION_API.send_ir_rc_command("[INSTALLATION_BOOT_UP_SEQUENCE_1]")
+                            if not(NOS_API.grab_picture("signal_value")):
+                                TEST_CREATION_API.write_log_to_file("STB lost signal on HDMI. Probably reboots.")
+                                NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
+                                                        + "; Error message: " + NOS_API.test_cases_results_info.reboot_error_message)
+                                NOS_API.set_error_message("Reboot")
+                                error_codes = NOS_API.test_cases_results_info.reboot_error_code
+                                error_messages = NOS_API.test_cases_results_info.reboot_error_message
+                                
+                                NOS_API.add_test_case_result_to_file_report(
+                                                test_result,
+                                                "- - - - - - - - - - - - - - - - - - - -",
+                                                "- - - - - - - - - - - - - - - - - - - -",
+                                                error_codes,
+                                                error_messages)
+                                end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                report_file = NOS_API.create_test_case_log_file(
+                                                NOS_API.test_cases_results_info.s_n_using_barcode,
+                                                NOS_API.test_cases_results_info.nos_sap_number,
+                                                NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                                "",
+                                                end_time)
+                                NOS_API.upload_file_report(report_file)
+                                NOS_API.test_cases_results_info.isTestOK = False
+                            
+                                ## Update test result
+                                TEST_CREATION_API.update_test_result(test_result)
+                                
+                                ## Return DUT to initial state and de-initialize grabber device
+                                NOS_API.deinitialize()
+                                
+                                NOS_API.send_report_over_mqtt_test_plan(
+                                        test_result,
+                                        end_time,
+                                        error_codes,
+                                        report_file)
+                                return
+                            video_result_1 = NOS_API.compare_pictures(ref_image, "signal_value", macro_right_place)
+                            if not(video_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                TEST_CREATION_API.write_log_to_file("STB didn't receive IR command")
+                                NOS_API.update_test_slot_comment("Error code: " + NOS_API.test_cases_results_info.ir_nok_error_code \
+                                                + "; Error message: " + NOS_API.test_cases_results_info.ir_nok_error_message)
+                                NOS_API.set_error_message("IR")
+                                error_codes = NOS_API.test_cases_results_info.ir_nok_error_code
+                                error_messages = NOS_API.test_cases_results_info.ir_nok_error_message
+                                
+                                NOS_API.add_test_case_result_to_file_report(
+                                                test_result,
+                                                "- - - - - - - - - - - - - - - - - - - -",
+                                                "- - - - - - - - - - - - - - - - - - - -",
+                                                error_codes,
+                                                error_messages)
+                                end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                report_file = NOS_API.create_test_case_log_file(
+                                                NOS_API.test_cases_results_info.s_n_using_barcode,
+                                                NOS_API.test_cases_results_info.nos_sap_number,
+                                                NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                                "",
+                                                end_time)
+                                NOS_API.upload_file_report(report_file)
+                                NOS_API.test_cases_results_info.isTestOK = False
+                        
+                                ## Update test result
+                                TEST_CREATION_API.update_test_result(test_result)
+                                
+                                ## Return DUT to initial state and de-initialize grabber device
+                                NOS_API.deinitialize()
+                                
+                                NOS_API.send_report_over_mqtt_test_plan(
+                                        test_result,
+                                        end_time,
+                                        error_codes,
+                                        report_file)
+                                return
                         try:
                             signal_value = NOS_API.compare_pictures(ref_image, "signal_value", macro_signal_level)
                             signal_quality = NOS_API.compare_pictures(ref_image, "signal_value", macro_signal_quality)
