@@ -254,7 +254,7 @@ def runTest():
                     
                     result = NOS_API.wait_for_multiple_pictures(["Black_HDMI_ref"], 5, ["[FULL_SCREEN]"], [80])
                     if (result != -1 and result != -2):
-                        TEST_CREATION_API.send_ir_rc_command("[CH_3]")
+                        TEST_CREATION_API.send_ir_rc_command(NOS_API.VERTICAL_POLARIZATION_CHANNEL_NUMBER)
                         time.sleep(3)
                         TEST_CREATION_API.send_ir_rc_command("[CH_4]")
                         
@@ -338,7 +338,7 @@ def runTest():
                                 error_messages = NOS_API.test_cases_results_info.zap_channel_up_error_message
                                 System_Failure = 2
                         else:
-                            TEST_CREATION_API.send_ir_rc_command("[CH_3]")
+                            TEST_CREATION_API.send_ir_rc_command(NOS_API.VERTICAL_POLARIZATION_CHANNEL_NUMBER)
                             time.sleep(4)
                             TEST_CREATION_API.send_ir_rc_command("[CH_4]")
                             time.sleep(5)

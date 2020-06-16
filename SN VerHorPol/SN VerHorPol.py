@@ -65,7 +65,46 @@ def runTest():
                 #if (NOS_API.test_cases_results_info.channel_boot_up_state):
                 #    ## Set language to Portugal if not set
                 #    TEST_CREATION_API.send_ir_rc_command("[Info_Box]")
-                #else:                
+                #else:  
+                ## Perform grab picture
+                if not(NOS_API.grab_picture("Block_Check_Image")):
+                    TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
+                    NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.image_absence_hdmi_error_code \
+                                                    + "; Error message: " + NOS_API.test_cases_results_info.image_absence_hdmi_error_message)
+                    NOS_API.set_error_message("Video HDMI")
+                    error_codes = NOS_API.test_cases_results_info.image_absence_hdmi_error_code
+                    error_messages = NOS_API.test_cases_results_info.image_absence_hdmi_error_message
+                    
+                    NOS_API.add_test_case_result_to_file_report(
+                                    test_result,
+                                    "- - - - - - - - - - - - - - - - - - - -",
+                                    "- - - - - - - - - - - - - - - - - - - -",
+                                    error_codes,
+                                    error_messages)
+                    end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    report_file = NOS_API.create_test_case_log_file(
+                                    NOS_API.test_cases_results_info.s_n_using_barcode,
+                                    NOS_API.test_cases_results_info.nos_sap_number,
+                                    NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                    "",
+                                    end_time)
+                    NOS_API.upload_file_report(report_file)
+                    NOS_API.test_cases_results_info.isTestOK = False
+        
+                    ## Update test result
+                    TEST_CREATION_API.update_test_result(test_result)
+                    
+                    ## Return DUT to initial state and de-initialize grabber device
+                    NOS_API.deinitialize()
+                    
+                    NOS_API.send_report_over_mqtt_test_plan(
+                            test_result,
+                            end_time,
+                            error_codes,
+                            report_file)
+                
+        
+                    return              
                 TEST_CREATION_API.send_ir_rc_command("[INFO_ZON_BOX_MENU_NEW]")
                 time.sleep(1)
                 ## Perform grab picture
@@ -107,6 +146,129 @@ def runTest():
                 
         
                     return
+                if(TEST_CREATION_API.compare_pictures("Block_Check_Image", "settings", "[FULL_SCREEN]")):
+                    TEST_CREATION_API.write_log_to_file("STB Blocks")
+                    NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.block_error_code \
+                                            + "; Error message: " + NOS_API.test_cases_results_info.block_error_message )
+                    NOS_API.set_error_message("STB bloqueou")
+                    error_codes = NOS_API.test_cases_results_info.block_error_code
+                    error_messages = NOS_API.test_cases_results_info.block_error_message 
+                    test_result = "FAIL"
+                    
+                    NOS_API.add_test_case_result_to_file_report(
+                                    test_result,
+                                    "- - - - - - - - - - - - - - - - - - - -",
+                                    "- - - - - - - - - - - - - - - - - - - -",
+                                    error_codes,
+                                    error_messages)
+                    end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    report_file = NOS_API.create_test_case_log_file(
+                                    NOS_API.test_cases_results_info.s_n_using_barcode,
+                                    NOS_API.test_cases_results_info.nos_sap_number,
+                                    NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                    "",
+                                    end_time)
+                    NOS_API.upload_file_report(report_file)
+                    NOS_API.test_cases_results_info.isTestOK = False
+        
+                    ## Update test result
+                    TEST_CREATION_API.update_test_result(test_result)
+                    
+                    ## Return DUT to initial state and de-initialize grabber device
+                    NOS_API.deinitialize()
+                    
+                    NOS_API.send_report_over_mqtt_test_plan(
+                            test_result,
+                            end_time,
+                            error_codes,
+                            report_file)
+                
+        
+                    return
+                
+                if not(TEST_CREATION_API.compare_pictures("zon_box_data_ref", "settings", "[ZON_BOX]") or TEST_CREATION_API.compare_pictures("zon_box_data_ref_1", "settings", "[ZON_BOX]")):
+                    TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX]")
+                    ## Navigate to the Info ZON box menu
+                    TEST_CREATION_API.send_ir_rc_command("[INFO_ZON_BOX_MENU_NEW]")
+
+                    if not(NOS_API.grab_picture("settings")):
+                        TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
+                        NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.image_absence_hdmi_error_code \
+                                                        + "; Error message: " + NOS_API.test_cases_results_info.image_absence_hdmi_error_message)
+                        NOS_API.set_error_message("Video HDMI")
+                        error_codes = NOS_API.test_cases_results_info.image_absence_hdmi_error_code
+                        error_messages = NOS_API.test_cases_results_info.image_absence_hdmi_error_message
+                        
+                        NOS_API.add_test_case_result_to_file_report(
+                                        test_result,
+                                        "- - - - - - - - - - - - - - - - - - - -",
+                                        "- - - - - - - - - - - - - - - - - - - -",
+                                        error_codes,
+                                        error_messages)
+                        end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                        report_file = NOS_API.create_test_case_log_file(
+                                        NOS_API.test_cases_results_info.s_n_using_barcode,
+                                        NOS_API.test_cases_results_info.nos_sap_number,
+                                        NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                        "",
+                                        end_time)
+                        NOS_API.upload_file_report(report_file)
+                        NOS_API.test_cases_results_info.isTestOK = False
+            
+                        ## Update test result
+                        TEST_CREATION_API.update_test_result(test_result)
+                        
+                        ## Return DUT to initial state and de-initialize grabber device
+                        NOS_API.deinitialize()
+                        
+                        NOS_API.send_report_over_mqtt_test_plan(
+                                test_result,
+                                end_time,
+                                error_codes,
+                                report_file)
+                    
+            
+                        return
+                    
+                    if not(TEST_CREATION_API.compare_pictures("zon_box_data_ref", "settings", "[ZON_BOX]") or TEST_CREATION_API.compare_pictures("zon_box_data_ref_1", "settings", "[ZON_BOX]")):
+                        TEST_CREATION_API.write_log_to_file("Doesn't Navigate to right place")
+                        NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
+                                                + "; Error message: " + NOS_API.test_cases_results_info.navigation_error_message)
+                        NOS_API.set_error_message("Navegação")
+                        error_codes = NOS_API.test_cases_results_info.navigation_error_code
+                        error_messages = NOS_API.test_cases_results_info.navigation_error_message
+                        NOS_API.add_test_case_result_to_file_report(
+                                        test_result,
+                                        "- - - - - - - - - - - - - - - - - - - -",
+                                        "- - - - - - - - - - - - - - - - - - - -",
+                                        error_codes,
+                                        error_messages)
+                        end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                        report_file = ""    
+                        if (test_result != "PASS"):
+                            report_file = NOS_API.create_test_case_log_file(
+                                            NOS_API.test_cases_results_info.s_n_using_barcode,
+                                            NOS_API.test_cases_results_info.nos_sap_number,
+                                            NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                            NOS_API.test_cases_results_info.mac_using_barcode,
+                                            end_time)
+                            NOS_API.upload_file_report(report_file)
+                            NOS_API.test_cases_results_info.isTestOK = False
+                            
+                            NOS_API.send_report_over_mqtt_test_plan(
+                                    test_result,
+                                    end_time,
+                                    error_codes,
+                                    report_file)
+                        
+                        
+                        ## Update test result
+                        TEST_CREATION_API.update_test_result(test_result)
+                    
+                        ## Return DUT to initial state and de-initialize grabber device
+                        NOS_API.deinitialize()
+                        return
+                         
                 ## Check language
                 if not(TEST_CREATION_API.compare_pictures("sc_info_ref", "settings", "[SETTINGS_1]")):
                     TEST_CREATION_API.send_ir_rc_command("[EXIT]")
