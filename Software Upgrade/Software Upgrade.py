@@ -43,6 +43,9 @@ SN_LENGTH = 14
 ## Number of alphanumeric characters in Cas_Id
 CASID_LENGTH = 12
     
+NOS_API.grabber_type()
+TEST_CREATION_API.grabber_type()
+
 def runTest():
 
     System_Failure = 0
@@ -311,13 +314,13 @@ def runTest():
             
                 if (NOS_API.wait_for_signal_present(15)):
                     
-                    result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota", "new_sw_detected_message_576", "new_sw_detected_message_720", "new_sw_detected_message_1080", "Check_Nagra_ref", "Check_Nagra_1080_ref"], 15, ["[WRITE_SW_HDMI]", "[SW_UPGRADE_MESSAGE_576]", "[SW_UPGRADE_MESSAGE_720]", "[SW_UPGRADE_MESSAGE_1080]", "[Nagra_Upgrade]", "[Nagra_Upgrade_1080]"], [80, 80, 80, 80, 80, 80])
+                    result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota", "sw_upgrade_started_via_ota_ref1", "new_sw_detected_message_576", "new_sw_detected_message_720", "new_sw_detected_message_1080", "Check_Nagra_ref", "Check_Nagra_1080_ref"], 15, ["[WRITE_SW_HDMI]", "[WRITE_SW_HDMI]", "[SW_UPGRADE_MESSAGE_576]", "[SW_UPGRADE_MESSAGE_720]", "[SW_UPGRADE_MESSAGE_1080]", "[Nagra_Upgrade]", "[Nagra_Upgrade_1080]"], [NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres])
                     
                     if (result == -2):
                         continue
                     
                     if (result != -1):
-                        if(result == 4 or result == 5):
+                        if(result == 5 or result == 6):
                             Nagra_Upgrade = True
                         sw_upgrade_detected = True
                         signal_detected_on_hdmi = True
@@ -327,19 +330,19 @@ def runTest():
                     TEST_CREATION_API.send_ir_rc_command("[EXIT_1]")
                     TEST_CREATION_API.send_ir_rc_command("[MENU_1]")
                 
-                    result = NOS_API.wait_for_multiple_pictures(["installation_boot_up_ref", "installation_boot_up_1080_ref", "menu_576_ref", "menu_720_ref", "menu_1080_ref", "menu_576_new_ref", "menu_720_new_ref", "menu_1080_new_ref", "new_sw_detected_message_576", "new_sw_detected_message_720", "new_sw_detected_message_1080"], 25, ["[INSTALLATION_BOOT_UP]", "[INSTALLATION_BOOT_UP_1080]", "[MENU_576]", "[MENU_720]", "[MENU_1080]", "[MENU_NEW_576]", "[MENU_NEW_720]", "[MENU_NEW_1080]", "[SW_UPGRADE_MESSAGE_576]", "[SW_UPGRADE_MESSAGE_720]", "[SW_UPGRADE_MESSAGE_1080]"], [80, 80, 70, 70, 70, 70,70,70, 80,80,80])
+                    result = NOS_API.wait_for_multiple_pictures(["installation_boot_up_ref", "installation_boot_up_ref1", "installation_boot_up_1080_ref", "menu_576_ref", "menu_720_ref", "menu_1080_ref", "menu_576_new_ref", "menu_720_new_ref", "menu_720_new_ref1", "menu_1080_new_ref", "menu_1080_new_ref1", "new_sw_detected_message_576", "new_sw_detected_message_720", "new_sw_detected_message_1080"], 25, ["[INSTALLATION_BOOT_UP]", "[INSTALLATION_BOOT_UP]", "[INSTALLATION_BOOT_UP_1080]", "[MENU_576]", "[MENU_720]", "[MENU_1080]", "[MENU_NEW_576]", "[MENU_NEW_720]", "[MENU_NEW_720]", "[MENU_NEW_1080]", "[MENU_NEW_1080]", "[SW_UPGRADE_MESSAGE_576]", "[SW_UPGRADE_MESSAGE_720]", "[SW_UPGRADE_MESSAGE_1080]"], [80, 80, 80, 70, 70, 70, 70, 70, 70, 70, 70, NOS_API.thres, NOS_API.thres, NOS_API.thres])
                     
-                    if (result == 0 or result == 1):
+                    if (result == 0 or result == 1 or result == 2):
                         NOS_API.test_cases_results_info.channel_boot_up_state = False
                         signal_detected_on_hdmi = True
                         signal_detected_on_cvbs = True
                         break
-                    elif(result >= 2 and result <= 7):
+                    elif(result >= 3 and result <= 10):
                         NOS_API.test_cases_results_info.channel_boot_up_state = True
                         signal_detected_on_hdmi = True
                         signal_detected_on_cvbs = True
                         break
-                    elif(result >= 8 and result <= 10):
+                    elif(result >= 11 and result <= 13):
                         sw_upgrade_detected = True
                         signal_detected_on_hdmi = True
                         signal_detected_on_cvbs = True
@@ -370,28 +373,28 @@ def runTest():
                         NOS_API.grabber_stop_video_source()
                         NOS_API.grabber_start_video_source(TEST_CREATION_API.VideoInterface.HDMI1)
                         
-                        result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota", "new_sw_detected_message_576", "new_sw_detected_message_720", "new_sw_detected_message_1080", "Check_Nagra_ref", "Check_Nagra_1080_ref"], 15, ["[WRITE_SW_HDMI]", "[SW_UPGRADE_MESSAGE_576]", "[SW_UPGRADE_MESSAGE_720]", "[SW_UPGRADE_MESSAGE_1080]", "[Nagra_Upgrade]", "[Nagra_Upgrade_1080]"], [80, 80, 80, 80, 80, 80])
+                        result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota", "sw_upgrade_started_via_ota_ref1", "new_sw_detected_message_576", "new_sw_detected_message_720", "new_sw_detected_message_1080", "Check_Nagra_ref", "Check_Nagra_1080_ref"], 15, ["[WRITE_SW_HDMI]", "[WRITE_SW_HDMI]", "[SW_UPGRADE_MESSAGE_576]", "[SW_UPGRADE_MESSAGE_720]", "[SW_UPGRADE_MESSAGE_1080]", "[Nagra_Upgrade]", "[Nagra_Upgrade_1080]"], [NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres])
                         
                         if (result == -2):
                             continue
                         if (result != -1):
-                            if(result == 4 or result == 5):
+                            if(result == 5 or result == 6):
                                 Nagra_Upgrade = True
                             sw_upgrade_detected = True
                             signal_detected_on_hdmi = True
                         
                         TEST_CREATION_API.send_ir_rc_command("[EXIT_1]")
                         TEST_CREATION_API.send_ir_rc_command("[MENU_1]")
-                        result = NOS_API.wait_for_multiple_pictures(["installation_boot_up_ref", "installation_boot_up_1080_ref", "menu_576_ref", "menu_720_ref", "menu_1080_ref", "menu_576_new_ref", "menu_720_new_ref", "menu_1080_new_ref", "new_sw_detected_message_576", "new_sw_detected_message_720", "new_sw_detected_message_1080"], 25, ["[INSTALLATION_BOOT_UP]", "[INSTALLATION_BOOT_UP_1080]","[MENU_576]", "[MENU_720]", "[MENU_1080]", "[MENU_NEW_576]", "[MENU_NEW_720]", "[MENU_NEW_1080]", "[SW_UPGRADE_MESSAGE_576]", "[SW_UPGRADE_MESSAGE_720]", "[SW_UPGRADE_MESSAGE_1080]"], [80, 80, 70, 70, 70, 70,70,70, 80,80,80])
+                        result = NOS_API.wait_for_multiple_pictures(["installation_boot_up_ref",  "installation_boot_up_ref1", "installation_boot_up_1080_ref", "menu_576_ref", "menu_720_ref", "menu_1080_ref", "menu_576_new_ref", "menu_720_new_ref", "menu_720_new_ref1", "menu_1080_new_ref", "menu_1080_new_ref", "new_sw_detected_message_576", "new_sw_detected_message_720", "new_sw_detected_message_1080"], 25, ["[INSTALLATION_BOOT_UP]", "[INSTALLATION_BOOT_UP]", "[INSTALLATION_BOOT_UP_1080]","[MENU_576]", "[MENU_720]", "[MENU_1080]", "[MENU_NEW_576]", "[MENU_NEW_720]", "[MENU_NEW_720]", "[MENU_NEW_1080]", "[MENU_NEW_1080]", "[SW_UPGRADE_MESSAGE_576]", "[SW_UPGRADE_MESSAGE_720]", "[SW_UPGRADE_MESSAGE_1080]"], [80, 80, 80, 70, 70, 70, 70, 70, 70, 70, 70, NOS_API.thres, NOS_API.thres, NOS_API.thres])
                         if (result == -2):
                             continue
-                        if (result == 0 or result == 1):
+                        if (result == 0 or result == 1 or result == 2):
                             NOS_API.test_cases_results_info.channel_boot_up_state = False
                             signal_detected_on_hdmi = True
-                        elif(result >= 2 and result <= 7):
+                        elif(result >= 3 and result <= 10):
                             NOS_API.test_cases_results_info.channel_boot_up_state = True
                             signal_detected_on_hdmi = True
-                        elif(result >= 8 and result <= 10):
+                        elif(result >= 11 and result <= 13):
                             signal_detected_on_hdmi = True
                             sw_upgrade_detected = True
                         if((signal_detected_on_hdmi == False) and (signal_detected_on_cvbs == True)):
@@ -711,9 +714,9 @@ def runTest():
             elif((signal_detected_on_hdmi == True) and (signal_detected_on_cvbs == True)):
                 if (sw_upgrade_detected):
                     if not(Nagra_Upgrade):
-                        result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota"], 30, ["[WRITE_SW_HDMI]"], [80])
+                        result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota", "sw_upgrade_started_via_ota_ref1"], 30, ["[WRITE_SW_HDMI]", "[WRITE_SW_HDMI]"], [NOS_API.thres, NOS_API.thres])
                         if (result != -1 and result != -2):
-                            result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_progress_ref"], 400, ["[WRITE_SW_HDMI]"], [80])
+                            result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_progress_ref", "sw_upgrade_progress_ref1"], 400, ["[WRITE_SW_HDMI]", "[WRITE_SW_HDMI]"], [NOS_API.thres, NOS_API.thres])
                             if (result != -1 and result != -2):                            
                                 if (NOS_API.wait_for_no_signal_present(90)):
                                     NOS_API.test_cases_results_info.DidUpgrade = 1
@@ -722,8 +725,8 @@ def runTest():
                                     time.sleep(15)
                                     NOS_API.test_cases_results_info.channel_boot_up_state = True
                                     test_result = "PASS"
-                                    result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref"], 35, ["[FULL_SCREEN]"], [80])
-                                    result_1 = NOS_API.wait_for_multiple_pictures(["Check_Nagra_1080_ref"], 35, ["[FULL_SCREEN]"], [80])
+                                    result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref"], 35, ["[FULL_SCREEN]"], [NOS_API.thres])
+                                    result_1 = NOS_API.wait_for_multiple_pictures(["Check_Nagra_1080_ref"], 35, ["[FULL_SCREEN]"], [NOS_API.thres])
                                     if (result != -1 and result != -2):
                                         if not(NOS_API.grab_picture("Check_Nagra")):
                                             TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
@@ -1146,15 +1149,18 @@ def runTest():
                         macro_signal_quality = "[SIGNAL_QUALITY_FTI_50_PERCENT_1080p]"
                         macro_right_place = "[FTI_Signal_1080]"
                         ref_image = "signal_value_fti_1080_ref"
+                        ref_image1 = "signal_value_fti_1080_ref"
                     else:
                         macro_signal_level = "[SIGNAL_VALUE_FTI_50_PERCENT]"
                         macro_signal_quality = "[SIGNAL_QUALITY_FTI_50_PERCENT]"
                         macro_right_place = "[FTI_Signal]"
                         ref_image = "signal_value_fti_ref"
+                        ref_image1 = "signal_value_fti_ref1"
                     
                     if (NOS_API.grab_picture("signal_value")):
                         video_result = NOS_API.compare_pictures(ref_image, "signal_value", macro_right_place)
-                        if not(video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                        video_result1 = NOS_API.compare_pictures(ref_image1, "signal_value", macro_right_place)
+                        if not(video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
                             TEST_CREATION_API.send_ir_rc_command("[Back_Left]")
                             time.sleep(1)
                             TEST_CREATION_API.send_ir_rc_command("[INSTALLATION_BOOT_UP_SEQUENCE_1]")
@@ -1195,7 +1201,8 @@ def runTest():
                                         report_file)
                                 return
                             video_result_1 = NOS_API.compare_pictures(ref_image, "signal_value", macro_right_place)
-                            if not(video_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                            video_result_2 = NOS_API.compare_pictures(ref_image1, "signal_value", macro_right_place)
+                            if not(video_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result_2 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
                                 TEST_CREATION_API.write_log_to_file("STB didn't receive IR command")
                                 NOS_API.update_test_slot_comment("Error code: " + NOS_API.test_cases_results_info.ir_nok_error_code \
                                                 + "; Error message: " + NOS_API.test_cases_results_info.ir_nok_error_message)
@@ -1234,15 +1241,19 @@ def runTest():
                         try:
                             signal_value = NOS_API.compare_pictures(ref_image, "signal_value", macro_signal_level)
                             signal_quality = NOS_API.compare_pictures(ref_image, "signal_value", macro_signal_quality)
+                            signal_value_1 = NOS_API.compare_pictures(ref_image1, "signal_value", macro_signal_level)
+                            signal_quality_1 = NOS_API.compare_pictures(ref_image1, "signal_value", macro_signal_quality)
                         
                         except Exception as error:
                             TEST_CREATION_API.write_log_to_file(str(error))
                             signal_value = 0
                             signal_quality = 0
+                            signal_value_1 = 0
+                            signal_quality_1 = 0
                             test_result = "FAIL"
                                                
                         ## Check if signal value higher than threshold
-                        if not(signal_value >= THRESHOLD and signal_quality >= THRESHOLD): 
+                        if not((signal_value >= THRESHOLD and signal_quality >= THRESHOLD) or (signal_value_1 >= THRESHOLD and signal_quality_1 >= THRESHOLD)): 
                             result = NOS_API.wait_for_multiple_pictures(["Signal_Parameters_ref"], 5, ["[Signal_Parameters]"], [80])
                             if (result != -1 and result != -2):
                                 if not(NOS_API.grab_picture("Check_Signal_Parameters")):
@@ -1326,15 +1337,19 @@ def runTest():
                                 try:
                                     signal_value = NOS_API.compare_pictures(ref_image, "signal_value", macro_signal_level)
                                     signal_quality = NOS_API.compare_pictures(ref_image, "signal_value", macro_signal_quality)
+                                    signal_value_1 = NOS_API.compare_pictures(ref_image1, "signal_value", macro_signal_level)
+                                    signal_quality_1 = NOS_API.compare_pictures(ref_image1, "signal_value", macro_signal_quality)
                                 
                                 except Exception as error:
                                     TEST_CREATION_API.write_log_to_file(str(error))
                                     signal_value = 0
                                     signal_quality = 0
+                                    signal_value_1 = 0
+                                    signal_quality_1 = 0
                                     test_result = "FAIL"
                                 
                         ## Check if signal value higher than threshold
-                        if not(signal_value >= THRESHOLD and signal_quality >= THRESHOLD):
+                        if not((signal_value >= THRESHOLD and signal_quality >= THRESHOLD) or (signal_value_1 >= THRESHOLD and signal_quality_1 >= THRESHOLD)): 
                             NOS_API.display_custom_dialog("Confirme Cabo RF e restantes cabos", 1, ["Continuar"], NOS_API.WAIT_TIME_TO_CLOSE_DIALOG)
                             time.sleep(2)
                             if not(NOS_API.grab_picture("signal_value")):
@@ -1378,17 +1393,21 @@ def runTest():
                             try:
                                 signal_value = NOS_API.compare_pictures(ref_image, "signal_value", macro_signal_level)
                                 signal_quality = NOS_API.compare_pictures(ref_image, "signal_value", macro_signal_quality)
+                                signal_value_1 = NOS_API.compare_pictures(ref_image1, "signal_value", macro_signal_level)
+                                signal_quality_1 = NOS_API.compare_pictures(ref_image1, "signal_value", macro_signal_quality)
                             
                             except Exception as error:
                                 TEST_CREATION_API.write_log_to_file(str(error))
                                 signal_value = 0
                                 signal_quality = 0
+                                signal_value_1 = 0
+                                signal_quality_1 = 0
                                 test_result = "FAIL"
                                 
                         ## Check if signal value higher than threshold
-                        if (signal_value >= THRESHOLD and signal_quality >= THRESHOLD):
+                        if ((signal_value >= THRESHOLD and signal_quality >= THRESHOLD) or (signal_value_1 >= THRESHOLD and signal_quality_1 >= THRESHOLD)):
                             TEST_CREATION_API.send_ir_rc_command("[OK]")
-                            result = NOS_API.wait_for_multiple_pictures(["scan_complete_ref", "scan_complete_1080p_ref"], 35, ["[SCAN_COMPLETED]", "[SCAN_COMPLETED_1080p]"], [80, 80])
+                            result = NOS_API.wait_for_multiple_pictures(["scan_complete_ref", "scan_complete_ref1", "scan_complete_1080p_ref"], 35, ["[SCAN_COMPLETED]", "[SCAN_COMPLETED]", "[SCAN_COMPLETED_1080p]"], [80, 80, 80])
                             
                             if (result == -2):
                                 TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
@@ -1434,22 +1453,22 @@ def runTest():
                             
                             test_result = "PASS"
                             
-                            result = NOS_API.wait_for_multiple_pictures(["new_sw_detected_message_576", "new_sw_detected_message_720", "new_sw_detected_message_1080", "Check_Nagra_ref", "Check_Nagra_1080_ref"], 30, ["[SW_UPGRADE_MESSAGE_576]", "[SW_UPGRADE_MESSAGE_720]", "[SW_UPGRADE_MESSAGE_1080]", "[Nagra_Upgrade]", "[Nagra_Upgrade_1080]"], [80, 80, 80, 80, 80])
+                            result = NOS_API.wait_for_multiple_pictures(["new_sw_detected_message_576", "new_sw_detected_message_720", "new_sw_detected_message_1080", "Check_Nagra_ref", "Check_Nagra_1080_ref"], 30, ["[SW_UPGRADE_MESSAGE_576]", "[SW_UPGRADE_MESSAGE_720]", "[SW_UPGRADE_MESSAGE_1080]", "[Nagra_Upgrade]", "[Nagra_Upgrade_1080]"], [NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres])
                             if(result == 3 or result == 4):
                                 Nagra_Upgrade = True
                             if (result != -1 and result != -2):
                                 if not(Nagra_Upgrade): 
-                                    result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota"], 30, ["[WRITE_SW_HDMI]"], [80])
+                                    result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota", "sw_upgrade_started_via_ota_ref1"], 30, ["[WRITE_SW_HDMI]", "[WRITE_SW_HDMI]"], [NOS_API.thres, NOS_API.thres])
                                     if (result != -1 and result != -2):
-                                        result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_progress_ref"], 400, ["[WRITE_SW_HDMI]"], [80])
+                                        result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_progress_ref", "sw_upgrade_progress_ref1"], 400, ["[WRITE_SW_HDMI]", "[WRITE_SW_HDMI]"], [NOS_API.thres, NOS_API.thres])
                                         if (result != -1 and result != -2):
                                             if (NOS_API.wait_for_no_signal_present(90)):
                                                 NOS_API.test_cases_results_info.DidUpgrade = 1
                                                 if not(NOS_API.wait_for_signal_present(25)):
                                                     TEST_CREATION_API.send_ir_rc_command("[POWER]")
                                                 time.sleep(15)
-                                                result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref"], 35, ["[FULL_SCREEN]"], [80])
-                                                result_1 = NOS_API.wait_for_multiple_pictures(["Check_Nagra_1080_ref"], 35, ["[FULL_SCREEN]"], [80])
+                                                result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref"], 35, ["[FULL_SCREEN]"], [NOS_API.thres])
+                                                result_1 = NOS_API.wait_for_multiple_pictures(["Check_Nagra_1080_ref"], 35, ["[FULL_SCREEN]"], [NOS_API.thres])
                                                 if (result != -1 and result != -2):
                                                     if not(NOS_API.grab_picture("Check_Nagra")):
                                                         test_result = "FAIL"

@@ -270,7 +270,7 @@ def runTest():
                         return
                          
                 ## Check language
-                if not(TEST_CREATION_API.compare_pictures("sc_info_ref", "settings", "[SETTINGS_1]")):
+                if not(TEST_CREATION_API.compare_pictures("sc_info_ref", "settings", "[SETTINGS_1]", NOS_API.thres)):
                     TEST_CREATION_API.send_ir_rc_command("[EXIT]")
                     TEST_CREATION_API.send_ir_rc_command("[SET_LANGUAGE_PORTUGAL_FROM_SETTINGS]")
                     TEST_CREATION_API.send_ir_rc_command("[EXIT]")
@@ -837,12 +837,12 @@ def runTest():
                             
                     TEST_CREATION_API.send_ir_rc_command("[Ver_Hor_Pol]")
                     if (NOS_API.grab_picture("signal_right_menu")):
-                        if not(TEST_CREATION_API.compare_pictures("signal_menu_ref", "signal_right_menu", "[CANAIS_MENU]")):
+                        if not(TEST_CREATION_API.compare_pictures("signal_menu_ref", "signal_right_menu", "[CANAIS_MENU]", NOS_API.thres)):
                             TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX]")
                             TEST_CREATION_API.send_ir_rc_command("[SIGNAL_MENU]")      
                             ## Perform grab picture                
                             if (NOS_API.grab_picture("signal_right_menu_1")):
-                                if not(TEST_CREATION_API.compare_pictures("signal_menu_ref", "signal_right_menu_1", "[CANAIS_MENU]")):
+                                if not(TEST_CREATION_API.compare_pictures("signal_menu_ref", "signal_right_menu_1", "[CANAIS_MENU]", NOS_API.thres)):
                                     TEST_CREATION_API.write_log_to_file("Doesn't Navigate to right place")
                                     NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
                                                             + "; Error message: " + NOS_API.test_cases_results_info.navigation_error_message)

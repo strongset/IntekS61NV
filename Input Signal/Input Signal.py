@@ -335,7 +335,7 @@ def runTest():
                                 return
                     TEST_CREATION_API.send_ir_rc_command("[SIGNAL_LEVEL_SETTINGS]")
                     if (NOS_API.grab_picture("signal_value")):
-                        if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "signal_value", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "signal_value", "[SIGNAL_VALUE_MENU]")):
+                        if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "signal_value", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "signal_value", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref1", "signal_value", "[SIGNAL_VALUE_MENU]")):
                             TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX]")
                             TEST_CREATION_API.send_ir_rc_command("[IMAGE_ZON]")    
                             TEST_CREATION_API.send_ir_rc_command("[SIGNAL_LEVEL_SETTINGS]")
@@ -378,7 +378,7 @@ def runTest():
                             
                 
                                 return
-                            if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "signal_value", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "signal_value", "[SIGNAL_VALUE_MENU]")):
+                            if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "signal_value", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "signal_value", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref1", "signal_value", "[SIGNAL_VALUE_MENU]")):
                                 TEST_CREATION_API.write_log_to_file("Doesn't Navigate to right place")
                                 NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
                                                         + "; Error message: " + NOS_API.test_cases_results_info.navigation_error_message)
@@ -419,7 +419,7 @@ def runTest():
                         
                         macro_signal_level = "[SIGNAL_VALUE_50_PERCENT]"
                         macro_signal_quality = "[SIGNAL_QUALITY_50_PERCENT]"
-                        ref_image = "signal_value_ref"               
+                        ref_image = "signal_value_ref"              
      
                         try:
                             signal_value = NOS_API.compare_pictures(ref_image, "signal_value", macro_signal_level)
@@ -435,7 +435,7 @@ def runTest():
                         if (signal_value >= THRESHOLD and signal_quality >= THRESHOLD):
                             #test_result = "PASS" 
                             TEST_CREATION_API.send_ir_rc_command("[OK]")
-                            result = NOS_API.wait_for_multiple_pictures(["Installed_Channels_ref"], 25, ["[Sic]"], [80])
+                            result = NOS_API.wait_for_multiple_pictures(["Installed_Channels_ref", "Installed_Channels_ref1"], 25, ["[Sic]", "[Sic]"], [80, 80])
                             if (result == -2):
                                 TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
                                 NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.image_absence_hdmi_error_code \
@@ -476,7 +476,7 @@ def runTest():
                                 return
                             if (result != -1):
                                 TEST_CREATION_API.send_ir_rc_command("[OK]")                            
-                                result_2 = NOS_API.wait_for_multiple_pictures(["new_sw_detected_message_720", "Check_Nagra_ref"], 15, ["[SW_UPGRADE_MESSAGE_720]", "[Nagra_Upgrade]"], [80, 80])
+                                result_2 = NOS_API.wait_for_multiple_pictures(["new_sw_detected_message_720", "Check_Nagra_ref"], 15, ["[SW_UPGRADE_MESSAGE_720]", "[Nagra_Upgrade]"], [NOS_API.thres, NOS_API.thres])
                                 if (result_2 == -2):
                                     TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
                                     NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
@@ -519,7 +519,7 @@ def runTest():
                                     TEST_CREATION_API.send_ir_rc_command("[POWER]")
                                     time.sleep(5)
                                     TEST_CREATION_API.send_ir_rc_command("[POWER]")
-                                    result_2 = NOS_API.wait_for_multiple_pictures(["new_sw_detected_message_720", "Check_Nagra_ref"], 15, ["[SW_UPGRADE_MESSAGE_720]", "[Nagra_Upgrade]"], [80, 80])
+                                    result_2 = NOS_API.wait_for_multiple_pictures(["new_sw_detected_message_720", "Check_Nagra_ref"], 15, ["[SW_UPGRADE_MESSAGE_720]", "[Nagra_Upgrade]"], [NOS_API.thres, NOS_API.thres])
                                 if (result_2 == -2):
                                     TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
                                     NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
@@ -559,9 +559,9 @@ def runTest():
                     
                                     return
                                 if (result_2 == 0):
-                                    result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota"], 30, ["[WRITE_SW_HDMI]"], [80])
+                                    result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota", "sw_upgrade_started_via_ota_ref1"], 30, ["[WRITE_SW_HDMI]", "[WRITE_SW_HDMI]"], [NOS_API.thres, NOS_API.thres])
                                     if (result != -1 and result != -2):
-                                        result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_progress_ref"], 400, ["[WRITE_SW_HDMI]"], [80])
+                                        result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_progress_ref", "sw_upgrade_progress_ref1"], 400, ["[WRITE_SW_HDMI]", "[WRITE_SW_HDMI]"], [NOS_API.thres, NOS_API.thres])
                                         if (result != -1 and result != -2):                            
                                             if (NOS_API.wait_for_no_signal_present(90)):
                                                 NOS_API.test_cases_results_info.DidUpgrade = 1
@@ -570,7 +570,7 @@ def runTest():
                                                 time.sleep(15)
                                                 NOS_API.test_cases_results_info.channel_boot_up_state = True
                                                 test_result = "PASS"
-                                                result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref", "Check_Nagra_1080_ref"], 35, ["[FULL_SCREEN]", "[FULL_SCREEN]"], [80, 80])
+                                                result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref", "Check_Nagra_1080_ref"], 35, ["[FULL_SCREEN]", "[FULL_SCREEN]"], [NOS_API.thres, NOS_API.thres])
                                                 if (result != -1 and result != -2):
                                                     if not(NOS_API.grab_picture("Check_Nagra")):
                                                         TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
@@ -613,7 +613,7 @@ def runTest():
                                                     video_result = 0
                                                     while(video_result == 0):
                                                         time.sleep(2)
-                                                        video_result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref", "Check_Nagra_1080_ref"], 5, ["[FULL_SCREEN]", "[FULL_SCREEN]"], [80])
+                                                        video_result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref", "Check_Nagra_1080_ref"], 5, ["[FULL_SCREEN]", "[FULL_SCREEN]"], [NOS_API.thres, NOS_API.thres])
                                                 if not(NOS_API.grab_picture("Upgrade_Error")):
                                                     test_result = "FAIL"
                                                     TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
@@ -733,14 +733,14 @@ def runTest():
                                 elif (result_2 == 1):
                                     while(video_result == 0):
                                         time.sleep(2)
-                                        video_result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref", "Check_Nagra_1080_ref"], 5, ["[FULL_SCREEN]", "[FULL_SCREEN]"], [80])
+                                        video_result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref", "Check_Nagra_1080_ref"], 5, ["[FULL_SCREEN]", "[FULL_SCREEN]"], [NOS_API.thres, NOS_API.thres])
                                     test_result = "PASS"
                                     System_Failure = 2
                                 else:
                                     TEST_CREATION_API.send_ir_rc_command("[EXIT_1]")
                                     TEST_CREATION_API.send_ir_rc_command("[MENU_1]")
-                                    result_2 = NOS_API.wait_for_multiple_pictures(["menu_720_ref", "menu_720_new_ref"], 25, ["[MENU_720]", "[MENU_NEW_720]"], [70, 70])
-                                    if (result_2 == 0 or result_2 == 1):                               
+                                    result_2 = NOS_API.wait_for_multiple_pictures(["menu_720_ref", "menu_720_new_ref", "menu_720_new_ref1"], 25, ["[MENU_720]", "[MENU_NEW_720]", "[MENU_NEW_720]"], [70, 70, 70])
+                                    if (result_2 == 0 or result_2 == 1 or result_2 == 2):                               
                                         test_result = "PASS"
                                         System_Failure = 2
                                     else:
@@ -785,8 +785,8 @@ def runTest():
                             else:
                                 TEST_CREATION_API.send_ir_rc_command("[EXIT_1]")
                                 TEST_CREATION_API.send_ir_rc_command("[MENU_1]")
-                                result_2 = NOS_API.wait_for_multiple_pictures(["menu_720_ref", "menu_720_new_ref"], 25, ["[MENU_720]", "[MENU_NEW_720]"], [70, 70])
-                                if (result_2 == 0 or result_2 == 1):                               
+                                result_2 = NOS_API.wait_for_multiple_pictures(["menu_720_ref", "menu_720_new_ref", "menu_720_new_ref1"], 25, ["[MENU_720]", "[MENU_NEW_720]", "[MENU_NEW_720]"], [70, 70, 70])
+                                if (result_2 == 0 or result_2 == 1 or result_2 == 2):                               
                                     test_result = "PASS"
                                     System_Failure = 2
                                 else:                            
@@ -866,7 +866,7 @@ def runTest():
                             
                 
                                 return
-                            if (TEST_CREATION_API.compare_pictures("Signal_Parameters_ref", "Check_Parameters", "[Signal_Parameters_Channel]")):
+                            if (TEST_CREATION_API.compare_pictures("Signal_Parameters_ref", "Check_Parameters", "[Signal_Parameters_Channel]") or TEST_CREATION_API.compare_pictures("signal_value_ref1", "Check_Parameters", "[Signal_Parameters_Channel]")):
                                 TEST_CREATION_API.send_ir_rc_command("[Change_Signal_Parameters]")
                                 if not(NOS_API.grab_picture("signal_value_2")):
                                     TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
@@ -920,7 +920,7 @@ def runTest():
                             ## Check if signal value higher than threshold                        
                             if (signal_value >= THRESHOLD and signal_quality >= THRESHOLD):
                                 TEST_CREATION_API.send_ir_rc_command("[OK]")
-                                result = NOS_API.wait_for_multiple_pictures(["Installed_Channels_ref"], 25, ["[Sic]"], [80])
+                                result = NOS_API.wait_for_multiple_pictures(["Installed_Channels_ref", "Installed_Channels_ref"], 25, ["[Sic]", "[Sic]"], [80, 80])
                                 if (result == -2):
                                     TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
                                     NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
@@ -961,7 +961,7 @@ def runTest():
                                     return
                                 if (result != -1):
                                     TEST_CREATION_API.send_ir_rc_command("[OK]")
-                                    result_2 = NOS_API.wait_for_multiple_pictures(["new_sw_detected_message_720", "Check_Nagra_ref"], 25, ["[SW_UPGRADE_MESSAGE_720]", "[Nagra_Upgrade]"], [80, 80])
+                                    result_2 = NOS_API.wait_for_multiple_pictures(["new_sw_detected_message_720", "Check_Nagra_ref"], 25, ["[SW_UPGRADE_MESSAGE_720]", "[Nagra_Upgrade]"], [NOS_API.thres, NOS_API.thres])
                                     if (result_2 == -2):
                                         TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
                                         NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
@@ -1004,7 +1004,7 @@ def runTest():
                                         TEST_CREATION_API.send_ir_rc_command("[POWER]")
                                         time.sleep(5)
                                         TEST_CREATION_API.send_ir_rc_command("[POWER]")
-                                        result_2 = NOS_API.wait_for_multiple_pictures(["new_sw_detected_message_720", "Check_Nagra_ref"], 15, ["[SW_UPGRADE_MESSAGE_720]", "[Nagra_Upgrade]"], [80, 80])
+                                        result_2 = NOS_API.wait_for_multiple_pictures(["new_sw_detected_message_720", "Check_Nagra_ref"], 15, ["[SW_UPGRADE_MESSAGE_720]", "[Nagra_Upgrade]"], [NOS_API.thres, NOS_API.thres])
                                     if (result_2 == -2):
                                         TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
                                         NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
@@ -1044,9 +1044,9 @@ def runTest():
                         
                                         return
                                     if (result_2 == 0):
-                                        result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota"], 30, ["[WRITE_SW_HDMI]"], [80])
+                                        result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_started_via_ota", "sw_upgrade_started_via_ota_ref1"], 30, ["[WRITE_SW_HDMI]", "[WRITE_SW_HDMI]"], [NOS_API.thres, NOS_API.thres])
                                         if (result != -1 and result != -2):
-                                            result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_progress_ref"], 400, ["[WRITE_SW_HDMI]"], [80])
+                                            result = NOS_API.wait_for_multiple_pictures(["sw_upgrade_progress_ref", "sw_upgrade_progress_ref1"], 400, ["[WRITE_SW_HDMI]", "[WRITE_SW_HDMI]"], [NOS_API.thres, NOS_API.thres])
                                             if (result != -1 and result != -2):                            
                                                 if (NOS_API.wait_for_no_signal_present(90)):
                                                     NOS_API.test_cases_results_info.DidUpgrade = 1
@@ -1055,7 +1055,7 @@ def runTest():
                                                     time.sleep(15)
                                                     NOS_API.test_cases_results_info.channel_boot_up_state = True
                                                     test_result = "PASS"
-                                                    result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref", "Check_Nagra_1080_ref"], 35, ["[FULL_SCREEN]", "[FULL_SCREEN]"], [80, 80])
+                                                    result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref", "Check_Nagra_1080_ref"], 35, ["[FULL_SCREEN]", "[FULL_SCREEN]"], [NOS_API.thres, NOS_API.thres])
                                                     if (result != -1 and result != -2):
                                                         if not(NOS_API.grab_picture("Check_Nagra")):
                                                             TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
@@ -1098,7 +1098,7 @@ def runTest():
                                                         video_result = 0
                                                         while(video_result == 0):
                                                             time.sleep(2)
-                                                            video_result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref", "Check_Nagra_1080_ref"], 5, ["[FULL_SCREEN]", "[FULL_SCREEN]"], [80])
+                                                            video_result = NOS_API.wait_for_multiple_pictures(["Check_Nagra_ref", "Check_Nagra_1080_ref"], 5, ["[FULL_SCREEN]", "[FULL_SCREEN]"], [NOS_API.thres, NOS_API.thres])
                                                     if not(NOS_API.grab_picture("Upgrade_Error")):
                                                         test_result = "FAIL"
                                                         TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
@@ -1221,8 +1221,8 @@ def runTest():
                                     else:
                                         TEST_CREATION_API.send_ir_rc_command("[EXIT_1]")
                                         TEST_CREATION_API.send_ir_rc_command("[MENU_1]")
-                                        result_2 = NOS_API.wait_for_multiple_pictures(["menu_720_ref", "menu_720_new_ref"], 25, ["[MENU_720]", "[MENU_NEW_720]"], [70, 70])
-                                        if (result_2 == 0 or result_2 == 1):                               
+                                        result_2 = NOS_API.wait_for_multiple_pictures(["menu_720_ref", "menu_720_new_ref", "menu_720_new_ref1"], 25, ["[MENU_720]", "[MENU_NEW_720]", "[MENU_NEW_720]"], [70, 70, 70])
+                                        if (result_2 == 0 or result_2 == 1 or result_2 == 2):                               
                                             test_result = "PASS"
                                             System_Failure = 2
                                         else:
@@ -1266,8 +1266,8 @@ def runTest():
                                 else:
                                     TEST_CREATION_API.send_ir_rc_command("[EXIT_1]")
                                     TEST_CREATION_API.send_ir_rc_command("[MENU_1]")
-                                    result_2 = NOS_API.wait_for_multiple_pictures(["menu_720_ref", "menu_720_new_ref"], 25, ["[MENU_720]", "[MENU_NEW_720]"], [70, 70])
-                                    if (result_2 == 0 or result_2 == 1):
+                                    result_2 = NOS_API.wait_for_multiple_pictures(["menu_720_ref", "menu_720_new_ref", "menu_720_new_ref1"], 25, ["[MENU_720]", "[MENU_NEW_720]", "[MENU_NEW_720]"], [70, 70, 70])
+                                    if (result_2 == 0 or result_2 == 1 or result_2 == 2):
                                         TEST_CREATION_API.send_ir_rc_command("[IMAGE_ZON]")
                                         TEST_CREATION_API.send_ir_rc_command("[SIGNAL_LEVEL_SETTINGS]")
                                         if not(NOS_API.grab_picture("Right_Place")):
@@ -1308,7 +1308,7 @@ def runTest():
                                         
                             
                                             return
-                                        if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "Right_Place", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "Right_Place", "[SIGNAL_VALUE_MENU]")):
+                                        if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "Right_Place", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "Right_Place", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref1", "Right_Place", "[SIGNAL_VALUE_MENU]")):
                                             TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX]")
                                             TEST_CREATION_API.send_ir_rc_command("[IMAGE_ZON]")    
                                             TEST_CREATION_API.send_ir_rc_command("[SIGNAL_LEVEL_SETTINGS]")
@@ -1351,7 +1351,7 @@ def runTest():
                                             
                                 
                                                 return
-                                            if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "Right_Place", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "Right_Place", "[SIGNAL_VALUE_MENU]")):
+                                            if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "Right_Place", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "Right_Place", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref1", "Right_Place", "[SIGNAL_VALUE_MENU]")):
                                                 TEST_CREATION_API.write_log_to_file("Doesn't Navigate to right place")
                                                 NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
                                                                         + "; Error message: " + NOS_API.test_cases_results_info.navigation_error_message)
@@ -1472,7 +1472,7 @@ def runTest():
                     
                                     return
                                 
-                                if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "signal_value_4", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "signal_value_4", "[SIGNAL_VALUE_MENU]")):
+                                if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "signal_value_4", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "signal_value_4", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref1", "signal_value_4", "[SIGNAL_VALUE_MENU]")):
                                     if not(NOS_API.grab_picture("signal_value_3")):
                                         TEST_CREATION_API.write_log_to_file("Image is not displayed on HDMI")
                                         NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.image_absence_hdmi_error_code \
@@ -1553,7 +1553,7 @@ def runTest():
                                     
                         
                                         return
-                                    if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "signal_value_4", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "signal_value_4", "[SIGNAL_VALUE_MENU]")):
+                                    if not(TEST_CREATION_API.compare_pictures("signal_value_ref", "signal_value_4", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref_old", "signal_value_4", "[SIGNAL_VALUE_MENU]") or TEST_CREATION_API.compare_pictures("signal_value_ref1", "signal_value_4", "[SIGNAL_VALUE_MENU]")):
                                         TEST_CREATION_API.write_log_to_file("Doesn't Navigate to right place")
                                         NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
                                                                 + "; Error message: " + NOS_API.test_cases_results_info.navigation_error_message)

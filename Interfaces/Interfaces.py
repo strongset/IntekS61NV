@@ -263,6 +263,8 @@ def runTest():
                         TEST_CREATION_API.grab_picture("service_2")
 
                         video_result = NOS_API.compare_pictures("service_2_ref", "service_2", "[HALF_SCREEN]")
+                        video_result1 = NOS_API.compare_pictures("service_2_ref1", "service_2", "[HALF_SCREEN]")
+                        video_result2 = NOS_API.compare_pictures("service_2_ref2", "service_2", "[HALF_SCREEN]")
             
                     except Exception as error:
                         ## Set test result to INCONCLUSIVE
@@ -312,13 +314,13 @@ def runTest():
                     ######################################################################################################################################################################################################################
                      
                     audio_result_1 = NOS_API.compare_audio("No_Both_ref", "audio_chUp") 
-                    if (video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD and (audio_result_1 < TEST_CREATION_API.AUDIO_THRESHOLD)):
+                    if ((video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result2 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD) and (audio_result_1 < TEST_CREATION_API.AUDIO_THRESHOLD)):
                         
                         NOS_API.test_cases_results_info.chUp_state = True
                         break
                     else:
                         if (chUp_counter == 2):
-                            if (video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                            if (video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
                                 TEST_CREATION_API.write_log_to_file("Audio with RT-RK pattern is not reproduced correctly on hdmi 720p interface.")
                                 NOS_API.set_error_message("Audio HDMI")
                                 NOS_API.update_test_slot_comment("Error codes: " + NOS_API.test_cases_results_info.hdmi_720p_signal_discontinuities_error_code  \
@@ -761,6 +763,8 @@ def runTest():
                                 TEST_CREATION_API.grab_picture("service_1")
                 
                                 video_result = NOS_API.compare_pictures("service_1_ref", "service_1", "[HALF_SCREEN]")
+                                video_result1 = NOS_API.compare_pictures("service_1_ref1", "service_1", "[HALF_SCREEN]")
+                                video_result2 = NOS_API.compare_pictures("service_1_ref2", "service_1", "[HALF_SCREEN]")
                 
                             except Exception as error:
                                     ## Set test result to INCONCLUSIVE
@@ -811,14 +815,14 @@ def runTest():
                             
                             audio_result_1 = NOS_API.compare_audio("No_Both_ref", "audio_chDown")
                             
-                            if (video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD and (audio_result_1 < TEST_CREATION_API.AUDIO_THRESHOLD)):
+                            if ((video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result2 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD) and (audio_result_1 < TEST_CREATION_API.AUDIO_THRESHOLD)):
                                 
                                 #test_result = "PASS"
                                 Zap_test_result = True
                                 break
                             else:
                                 if (chDown_counter == 2):
-                                    if(video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                    if(video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result2 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
                                         TEST_CREATION_API.write_log_to_file("Audio with RT-RK pattern is not reproduced correctly on hdmi 720p interface.")
                                         NOS_API.set_error_message("Audio HDMI")
                                         NOS_API.update_test_slot_comment("Error codes: " + NOS_API.test_cases_results_info.hdmi_720p_signal_discontinuities_error_code  \
@@ -839,6 +843,7 @@ def runTest():
                                         System_Failure = 2
                                 else:
                                     TEST_CREATION_API.send_ir_rc_command(NOS_API.CHANNEL)
+                                    time.sleep(3)
                                     TEST_CREATION_API.send_ir_rc_command("[CH+]")
                                     time.sleep(2)
                                     TEST_CREATION_API.send_ir_rc_command("[CH-]")
@@ -1210,13 +1215,15 @@ def runTest():
                             
                                     ## Compare grabbed and expected image and get result of comparison
                                     video_result = NOS_API.compare_pictures("HDMI_video_ref", "HDMI_video", "[HALF_SCREEN_1080p]")
+                                    video_result1 = NOS_API.compare_pictures("HDMI_video_ref1", "HDMI_video", "[HALF_SCREEN_1080p]")
+                                    video_result2 = NOS_API.compare_pictures("HDMI_video_ref2", "HDMI_video", "[HALF_SCREEN_1080p]")
                             
                                 except:
                                     i = i + 1
                                     continue
                             
                                 ## Check video analysis results and update comments
-                                if (video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                if (video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD  or video_result2 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
                                     i = 0
                                     if (analysed_video): 
                                         HDMI1080_test_result = True
@@ -1285,13 +1292,15 @@ def runTest():
                                 
                                         ## Compare grabbed and expected image and get result of comparison
                                         video_result = NOS_API.compare_pictures("COMPOSITE_video_ref", "COMPOSITE_video", "[HALF_SCREEN_576p]")
+                                        video_result1 = NOS_API.compare_pictures("COMPOSITE_video_ref1", "COMPOSITE_video", "[HALF_SCREEN_576p]")
+                                        video_result2 = NOS_API.compare_pictures("COMPOSITE_video_ref2", "COMPOSITE_video", "[HALF_SCREEN_576p]")
                                 
                                     except:
                                         i = i + 1
                                         continue
                 
                                     ## Check video analysis results and update comments
-                                    if (video_result >= NOS_API.DEFAULT_CVBS_VIDEO_THRESHOLD):
+                                    if (video_result >= NOS_API.DEFAULT_CVBS_VIDEO_THRESHOLD or video_result1 >= NOS_API.DEFAULT_CVBS_VIDEO_THRESHOLD or video_result2 >= NOS_API.DEFAULT_CVBS_VIDEO_THRESHOLD):
                                         ## Set test result to PASS
                                         Composite_test_result = True
                                         #test_result = "PASS"

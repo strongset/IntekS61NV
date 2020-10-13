@@ -169,7 +169,7 @@ def runTest():
                         time.sleep(1)
                     TEST_CREATION_API.send_ir_rc_command("[ENTER_AUTODIAG_new]")
                 
-                    result = NOS_API.wait_for_multiple_pictures(["AutoDiag_ref"], 45, ["[Enter_AutoDiag]"], [TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD])       
+                    result = NOS_API.wait_for_multiple_pictures(["AutoDiag_ref", "AutoDiag_new_ref1"], 45, ["[Enter_AutoDiag]", "[Enter_AutoDiag]"], [TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD, TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD])       
                     if not(result != -1 and result != -2):
                         if(counter == 1):  
                             counter = counter + 1
@@ -254,7 +254,8 @@ def runTest():
                         return
                     
                     video_result = NOS_API.compare_pictures("AutoDiag_new_ref", "AutoDiag", "[AutoDiag_new]")
-                    if (video_result < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):  
+                    video_result1 = NOS_API.compare_pictures("AutoDiag_new_ref1", "AutoDiag", "[AutoDiag_new]")
+                    if (video_result < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD and video_result1 < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):  
                         
                         TEST_CREATION_API.send_ir_rc_command("[RED]")
                         time.sleep(1)
@@ -469,7 +470,7 @@ def runTest():
                         else:
                             counter = counter + 1
                             continue
-                    result_1 = NOS_API.wait_for_multiple_pictures(["AutoDiag_ref"], 45, ["[Enter_AutoDiag]"], [TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD])
+                    result_1 = NOS_API.wait_for_multiple_pictures(["AutoDiag_ref", "AutoDiag_new_ref1"], 45, ["[Enter_AutoDiag]", "[Enter_AutoDiag]"], [TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD, TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD])
                     if not(result_1 != -1 and result_1 != -2):
                         if(counter == 1):  
                             if(result_1 != -2):
@@ -655,10 +656,10 @@ def runTest():
                     return
                 if (TEST_CREATION_API.compare_pictures("USB_AD_ref", "USB_Check", "[Check_USB]")):
                     TEST_CREATION_API.send_ir_rc_command("[OK]")                              
-                if not(NOS_API.wait_for_multiple_pictures(["AutoDiag_End_ref"], 60, ["[AutoDiag_End]"], [TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD]) != -1):
+                if not(NOS_API.wait_for_multiple_pictures(["AutoDiag_End_ref", "AutoDiag_End_ref1", "AutoDiag_End_ref2"], 60, ["[AutoDiag_End]", "[AutoDiag_End]", "[AutoDiag_End]"], [TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD, TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD, TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD]) != -1):
                     video_result = NOS_API.compare_pictures("Blocks_Image_ref", "DUT_snapshot_name", "[Block_Image]")
                     if (video_result > TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
-                        if not(NOS_API.wait_for_multiple_pictures(["AutoDiag_End_ref"], 60, ["[AutoDiag_End]"], [TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD]) != -1):
+                        if not(NOS_API.wait_for_multiple_pictures(["AutoDiag_End_ref", "AutoDiag_End_ref1", "AutoDiag_End_ref2"], 60, ["[AutoDiag_End]", "[AutoDiag_End]", "[AutoDiag_End]"], [TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD, TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD, TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD]) != -1):
                             if counter == 0:
                                 counter += 1
                                 continue
@@ -745,9 +746,11 @@ def runTest():
                         else:
                             counter += 1
                             continue
-                if (NOS_API.wait_for_multiple_pictures(["AutoDiag_End_ref"], 60, ["[AutoDiag_End]"], [TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD]) != -1):
+                if (NOS_API.wait_for_multiple_pictures(["AutoDiag_End_ref", "AutoDiag_End_ref1", "AutoDiag_End_ref2"], 60, ["[AutoDiag_End]", "[AutoDiag_End]", "[AutoDiag_End]"], [TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD, TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD, TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD]) != -1):
                     video_result = NOS_API.compare_pictures("AutoDiag_End_ref", "DUT_snapshot_name", "[AutoDiag_Pass]")
-                    if (video_result > TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                    video_result1 = NOS_API.compare_pictures("AutoDiag_End_ref1", "DUT_snapshot_name", "[AutoDiag_Pass]")
+                    video_result2 = NOS_API.compare_pictures("AutoDiag_End_ref2", "DUT_snapshot_name", "[AutoDiag_Pass]")
+                    if (video_result > TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result1 > TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result2 > TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
                         test_result = "PASS"
                         counter = 2
                         NOS_API.Send_Serial_Key("d", "feito")
