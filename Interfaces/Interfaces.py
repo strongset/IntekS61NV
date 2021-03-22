@@ -238,7 +238,7 @@ def runTest():
     ###################################################################################################      Test        ###############################################################################################################
     ##################################################################################################################################################################################################################################### 
                 ## Zap to service
-                TEST_CREATION_API.send_ir_rc_command("[CH_4]")
+                TEST_CREATION_API.send_ir_rc_command("[CH_11]")
                 
                 ## Set volume to max
                 TEST_CREATION_API.send_ir_rc_command("[VOL_MIN]")
@@ -256,7 +256,7 @@ def runTest():
                     if (result != -1 and result != -2):
                         TEST_CREATION_API.send_ir_rc_command(NOS_API.VERTICAL_POLARIZATION_CHANNEL_NUMBER)
                         time.sleep(3)
-                        TEST_CREATION_API.send_ir_rc_command("[CH_4]")
+                        TEST_CREATION_API.send_ir_rc_command("[CH_11]")
                         
                     try:
                         ## Perform grab picture
@@ -342,7 +342,7 @@ def runTest():
                         else:
                             TEST_CREATION_API.send_ir_rc_command(NOS_API.VERTICAL_POLARIZATION_CHANNEL_NUMBER)
                             time.sleep(4)
-                            TEST_CREATION_API.send_ir_rc_command("[CH_4]")
+                            TEST_CREATION_API.send_ir_rc_command("[CH_11]")
                             time.sleep(5)
                             #TEST_CREATION_API.send_ir_rc_command("[CH-]")
                             #time.sleep(3)
@@ -355,7 +355,7 @@ def runTest():
                 if (NOS_API.test_cases_results_info.chUp_state == True):
                     
                     ## Zap to service
-                    TEST_CREATION_API.send_ir_rc_command(NOS_API.CHANNEL)
+                    TEST_CREATION_API.send_ir_rc_command("[CH_40]")
                     time.sleep(1)
                     
                     if not (NOS_API.is_signal_present_on_video_source()):
@@ -438,7 +438,7 @@ def runTest():
             
                             return
                          
-                        TEST_CREATION_API.send_ir_rc_command("[CH_3]")
+                        TEST_CREATION_API.send_ir_rc_command("[CH_40]")
                         time.sleep(3)
                         TEST_CREATION_API.send_ir_rc_command("[CH-]")
                         time.sleep(3)
@@ -842,7 +842,7 @@ def runTest():
                                         error_messages = NOS_API.test_cases_results_info.zap_channel_down_error_message
                                         System_Failure = 2
                                 else:
-                                    TEST_CREATION_API.send_ir_rc_command(NOS_API.CHANNEL)
+                                    TEST_CREATION_API.send_ir_rc_command("[CH_40]")
                                     time.sleep(3)
                                     TEST_CREATION_API.send_ir_rc_command("[CH+]")
                                     time.sleep(2)
